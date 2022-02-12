@@ -8,12 +8,13 @@ import {
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { Price } from './price';
+import { Product } from './product';
 
 @Controller()
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
   @Get('/products/:id')
-  getProductsId(@Param('id', ParseIntPipe) id: number) {
+  async getProductsId(@Param('id', ParseIntPipe) id: number): Promise<Product> {
     return this.productService.getProductsId(id);
   }
   @Put('/products/:id')
