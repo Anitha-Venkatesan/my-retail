@@ -7,7 +7,6 @@ import {
   Put,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { Price } from './price';
 import { Product } from './product';
 import {
   ApiNotFoundResponse,
@@ -34,6 +33,7 @@ export class ProductController {
   async getProductsId(@Param('id', ParseIntPipe) id: number): Promise<Product> {
     return this.productService.getProductsId(id);
   }
+
   @Put('/:id')
   @ApiOperation({
     summary: 'Update Products by Id',
@@ -46,11 +46,10 @@ export class ProductController {
     status: 404,
     description: 'Product not found',
   })
-  editProductsId(
+  async editProductsId(
     @Param('id', ParseIntPipe) id: number,
-    @Body() price: Price,
-  ): Price {
-    console.log(price);
-    return this.productService.editProductsId(id, price);
+    @Body() product: Product,
+  ): Promise<Product> {
+    return this.productService.editProductsId(id, product);
   }
 }

@@ -1,20 +1,40 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Price } from './price';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Product } from './product';
 import axios from 'axios';
+import { InjectRepository } from '@nestjs/typeorm';
+import { MongoRepository } from 'typeorm';
+import { ProductEntity } from './entity/product.entity';
 
 @Injectable()
 export class ProductService {
+  constructor(
+    @InjectRepository(ProductEntity)
+    private readonly productRepository: MongoRepository<ProductEntity>,
+  ) {}
   async getProductsId(id: number): Promise<Product> {
     const title = await this.getProductNameByID(id);
     const product = new Product();
+    const productEntity = await this.productRepository.findOne({ id });
     product.id = id;
     product.name = title;
+    if (productEntity) {
+      product.currentPrice = productEntity.currentPrice;
+    }
     return product;
   }
-  editProductsId(id: number, price: Price): Price {
-    return price;
+  async editProductsId(id: number, product: Product): Promise<Product> {
+    let productEntity = await this.productRepository.findOne({ id });
+    const title = await this.getProductNameByID(id);
+    if (!productEntity) {
+      productEntity = new ProductEntity();
+    }
+    productEntity.id = id;
+    product.name = title;
+    productEntity.currentPrice = product.currentPrice;
+    await this.productRepository.save(productEntity);
+    return product;
   }
+
   async getProductNameByID(id: number): Promise<string> {
     let response;
     try {
