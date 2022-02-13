@@ -9,7 +9,11 @@ import {
 import { ProductService } from './product.service';
 import { Price } from './price';
 import { Product } from './product';
-import { ApiNotFoundResponse, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiNotFoundResponse,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @Controller('/products')
 export class ProductController {
@@ -21,6 +25,7 @@ export class ProductController {
   @ApiResponse({
     status: 200,
     description: 'Product information',
+    type: Product,
   })
   @ApiNotFoundResponse({
     status: 404,
