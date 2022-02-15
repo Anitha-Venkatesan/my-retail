@@ -1,18 +1,35 @@
+import { Controller } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Product } from './product';
 import { ProductController } from './product.controller';
+import { ProductService } from './product.service';
 
 describe('ProductController', () => {
   let controller: ProductController;
+  let service: ProductService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [ProductController],
-    }).compile();
-
-    controller = module.get<ProductController>(ProductController);
+    service = new ProductService(null);
+    controller = new ProductController(service);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('should be call getProductsId from ProductService', async () => {
+    const product = new Product();
+    const getProductsIdSpy = jest
+      .spyOn(service, 'getProductsId')
+      .mockResolvedValue(product);
+    const actual = await controller.getProductsId(1);
+    expect(getProductsIdSpy).toHaveBeenCalledWith(1);
+    expect(actual).toEqual(product);
+  });
+
+  it('should be call editProductsId from ProductService', async () => {
+    const product = new Product();
+    const editProductsIdSpy = jest
+      .spyOn(service, 'editProductsId')
+      .mockResolvedValue(product);
+    const actual = await controller.editProductsId(1, product);
+    expect(editProductsIdSpy).toHaveBeenCalledWith(1, product);
+    expect(actual).toEqual(product);
   });
 });
