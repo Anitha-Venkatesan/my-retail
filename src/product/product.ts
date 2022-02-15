@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsDefined,
+  IsInt,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Price } from './price';
 
 export class Product {
@@ -20,6 +26,10 @@ export class Product {
   @ApiProperty({
     description: 'Product current price',
     type: Price,
+    name: 'current_price',
   })
-  currentPrice?: Price;
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => Price)
+  current_price?: Price;
 }

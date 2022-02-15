@@ -2,15 +2,16 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
 
 export class Price {
-  @IsNumber()
   @ApiProperty({
     description: 'Product price',
   })
+  @IsNumber()
   value: number;
 
-  @IsString()
   @ApiProperty({
     description: 'Product currency code',
+    name: 'currency_code',
   })
-  currencyCode: string;
+  @IsString()
+  currency_code: string;
 }

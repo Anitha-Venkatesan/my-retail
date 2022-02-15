@@ -4,6 +4,8 @@ import axios from 'axios';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MongoRepository } from 'typeorm';
 import { ProductEntity } from './entity/product.entity';
+import { Price } from './price';
+import { PriceEntity } from './entity/price.entity';
 
 @Injectable()
 export class ProductService {
@@ -14,24 +16,30 @@ export class ProductService {
   async getProductsId(id: number): Promise<Product> {
     const title = await this.getProductNameByID(id);
     const product = new Product();
-    const productEntity = await this.productRepository.findOne({ id });
     product.id = id;
     product.name = title;
+    const productEntity = await this.productRepository.findOne({ id });
     if (productEntity) {
-      product.currentPrice = productEntity.currentPrice;
+      const price = new Price();
+      price.value = productEntity.currentPrice.value;
+      price.currency_code = productEntity.currentPrice.currencyCode;
+      product.current_price = price;
     }
     return product;
   }
   async editProductsId(id: number, product: Product): Promise<Product> {
     let productEntity = await this.productRepository.findOne({ id });
-    const title = await this.getProductNameByID(id);
     if (!productEntity) {
       productEntity = new ProductEntity();
     }
+    const title = await this.getProductNameByID(id);
     productEntity.id = id;
-    product.name = title;
-    productEntity.currentPrice = product.currentPrice;
+    const priceEntity = new PriceEntity();
+    priceEntity.value = product.current_price.value;
+    priceEntity.currencyCode = product.current_price.currency_code;
+    productEntity.currentPrice = priceEntity;
     await this.productRepository.save(productEntity);
+    product.name = title;
     return product;
   }
 
