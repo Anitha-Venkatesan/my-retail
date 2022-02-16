@@ -1,73 +1,50 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# my-retail
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+RESTful service that can retrieve product and price details by ID for myRetail company.
+
+## Technologies
+
+1. NestJS
+2. MongoDB
+3. Javascript and Typescript
 
 ## Installation
 
-```bash
-$ npm install
-```
+### Install Node JS
+1. Install Node JS (https://nodejs.org/en/download/)
 
-## Running the app
+### Install Mongo DB
 
-```bash
-# development
-$ npm run start
+1. Run `docker pull mongo`
+2. Run `docker run --name my-retail-db -p -27017:27017 mongo`
 
-# watch mode
-$ npm run start:dev
+### Install Application
 
-# production mode
-$ npm run start:prod
-```
+1. Clone `git clone git@github.com:Anitha-Venkatesan/my-retail.git`
+2. Goto `cd my-retail`
+3. Run `npm install` 
+4. Run `npm run start:dev`
+5. Open http://localhost:3000/api/ for swagger API document.
 
-## Test
+### Run Test
 
-```bash
-# unit tests
-$ npm run test
+1. Run `npm run test`
 
-# e2e tests
-$ npm run test:e2e
+Make sure `DATABASE_HOST` and `DATABASE_PORT` properties in `.env` file matches the mongodb host and port which is created using docker.
 
-# test coverage
-$ npm run test:cov
-```
+## Assumptions
 
-## Support
+1. During GET, when price information is not present in database then I am returning only `id` and `name`.
+2. During PUT, when price information is present in database I will update the data.
+3. During PUT, when price information is not present in database I will create a new record in database.
+4. During PUT, when redsky say the item is not valid then I am not creating or updating the price information in database.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Future Improvements
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+1. Create a secured Mongo DB with credentials.
+2. Enable log for debugging.
+3. Cache redsky request, since name is always same for the ID.
+4. Enable CI/CD
+5. Authenticate the end points.
