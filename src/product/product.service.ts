@@ -13,6 +13,7 @@ export class ProductService {
     @InjectRepository(ProductEntity)
     private readonly productRepository: MongoRepository<ProductEntity>,
   ) {}
+
   async getProductsId(id: number): Promise<Product> {
     const title = await this.getProductNameByID(id);
     const product = new Product();
